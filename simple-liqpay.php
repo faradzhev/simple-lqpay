@@ -271,21 +271,25 @@ function woocommerce_init() {
 
                 $generated_signature = base64_encode(sha1($this->private_key . $data . $this->private_key, 1));
 
-                if ($received_signature != $generated_signature || $this->public_key != $received_public_key) wp_die('IPN Request Failure');
+                if ($received_signature != $generated_signature || $this->public_key != $received_public_key) wp_die('IPN Request Failure [signature]');
 
                 $order = new WC_Order($order_id);
 
                 if ($status == 'success' || ($status == 'sandbox' && $this->sandbox == 'yes')) {
-                    $order->update_status($this->status, __('Заказ оплачен (оплата получена)', 'woocommerce'));
-                    $order->add_order_note(__('Клиент оплатил свой заказ', 'woocommerce'));
+                    $order->update_status($this->status, __('Заказ сплачено (оплату успішно отримано) ['.$status.']', 'woocommerce'));
+                    $order->add_order_note(__('Клієнт сплатив замовлення', 'woocommerce'));
                     $woocommerce->cart->empty_cart();
-                } else {
-                    $order->update_status('failed', __('Оплата не была получена', 'woocommerce'));
+                } else if ($status == 'wait_accept') {
+                    $order->update_status('success', __('Заказ сплачено (оплату успішно отримано) ['.$status.']', 'woocommerce'));
+                    $order->add_order_note(__('Клієнт сплатив замовлення, АЛЕ магазин не був перевірений LIQPAY, тому зарахувань на рахунок поки немає', 'woocommerce'));
+                    $woocommerce->cart->empty_cart();
+		} else {
+                    $order->update_status('failed', __('Оплата не була отримана ['.$status.']', 'woocommerce'));
                     wp_redirect($order->get_cancel_order_url());
                     exit;
                 }
             } else {
-                wp_die('IPN Request Failure');
+                wp_die('IPN Request Failure [no success]');
             }
 
         }
