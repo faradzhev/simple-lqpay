@@ -49,3 +49,6 @@ This plugin is the gateway for LiqPay system of woocommerce
 
 = 1.6 =
 * Добавлена возможность, изменять изображение кнопки - ОПЛАТИТЬ
+
+= 1.75 =
+* Виправлено Transaction ID, додано обробку статусу `wait_accept`
