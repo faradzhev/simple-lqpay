@@ -267,7 +267,7 @@ function woocommerce_init() {
                 $sender_phone = $parsed_data->sender_phone;
                 $amount = $parsed_data->amount;
                 $currency = $parsed_data->currency;
-                $transaction_id = $parsed_data->transaction_id;
+                $transaction_id = $parsed_data->payment_id;
 
                 $generated_signature = base64_encode(sha1($this->private_key . $data . $this->private_key, 1));
 
