@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce Simple LiqPay
 Plugin URI:
 Description: LiqPay gateway for WooCommerce
-Version: 1.7
+Version: 1.75
 Author: Alex Shandor
 Author URI: http://pupuga.net
 */
